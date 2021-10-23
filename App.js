@@ -1,21 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import TabScreen  from './App/Screens/TabScreen';
+import LoginScreen from './App/Screens/LoginScreen';
+import firebase from 'firebase';
+
+console.disableYellowBox = true;
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Hi!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  React.useEffect(() => {
+    checkIfLoged()
+
+    //The return works as the "componentWillUnmount"
+    return () => checkIfLoged();
+  },);
+
+  const checkIfLoged = () => {
+    //This function checks if the user is logged in and decides wich screen to render accordingly
+    firebase.auth().onAuthStateChanged((user) => {
+      if(user){
+        setLoggedIn(true);
+      }else{
+        setLoggedIn(false);
+      }
+    });
+  }
+
+  if(loggedIn){
+    return <TabScreen />;
+  }else{
+    return <LoginScreen />;
+  }
+}
