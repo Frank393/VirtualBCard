@@ -18,7 +18,7 @@ const Tab = createMaterialBottomTabNavigator();
 const TabScreen = () => (
   <NavigationContainer>
     <Tab.Navigator
-        initialRouteName="Profile"
+        initialRouteName="List"
         activeColor="#fff"
       >
         <Tab.Screen
@@ -28,9 +28,7 @@ const TabScreen = () => (
             tabBarLabel: 'Contacts',
             tabBarColor: '#5f9ea0',
             tabBarIcon: ({ color }) => (
-              <Icon name="ios-list-box"
-              color={color}
-              size={26} />
+              <FontAwesome name="list" color={color} size={26} />
             ),
           }}
         /> 
@@ -38,24 +36,24 @@ const TabScreen = () => (
           name="Scan"
           component={ScanStackScreen}
           options={{
-            tabBarLabel: 'Scan',
+            tabBarLabel: 'Scanner',
             tabBarColor: '#37494a',
             tabBarIcon: ({ color }) => (
-              <Icon name="ios-qr-scanner" color={color} size={26} />
+              <FontAwesome name="camera-retro" color={color} size={26} />
             ),
           }}
         />
-         <Tab.Screen
+         {/* <Tab.Screen
           name="QRcode"
           component={QrcodeStackScreen}
           options={{
             tabBarLabel: 'QR Code',
             tabBarColor: '#6f6a9c',
             tabBarIcon: ({ color }) => (
-              <FontAwesome name="qrcode" color={color} size={26} />
+              <FontAwesome name="search" color={color} size={26} />
             ),
           }}
-        />
+        /> */}
         <Tab.Screen
           name="Profile"
           component={ProfileStackScreen}
@@ -149,8 +147,8 @@ const ProfileStackScreen = ({navigation}) => (
           component={ProfileScreen}
         />
         <ProfileStack.Screen
-          name="Register"
-          component={RegisterScreen}
+          name="QRcode"
+          component={QRcodeScreen}
         />
 
       </ProfileStack.Navigator>
@@ -168,7 +166,7 @@ const QrcodeStackScreen = ({navigation}) => (
         }
       }}>
         <QrcodeStack.Screen
-          name="QR Code"
+          name="QRcode"
           component={QRcodeScreen}
         />
       </QrcodeStack.Navigator>

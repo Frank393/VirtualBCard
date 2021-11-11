@@ -21,6 +21,7 @@ export default function RegisterScreen ({navigation, route}) {
   [phone, setPhone] = useState('');
   [email, setEmail] = useState('');
   [address, setAddress] = useState('');
+  [privacy, setPrivacy] = useState('');
 
   //registering ID
   let user = firebase.auth().currentUser;
@@ -35,6 +36,7 @@ export default function RegisterScreen ({navigation, route}) {
         phone: phone,
         email: email,
         address: address,
+        privacy: privacy
       }, { merge: true });
 
       console.log('REGISTERED');

@@ -6,21 +6,31 @@ import {
   SafeAreaView,
   Button,
   TouchableOpacity,
+  Switch
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../Themes/Colors';
 import Metrics from '../Themes/Metrics';
 import firestore from '../../firebase';
 import firebase from 'firebase';
 import 'firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { FontAwesome } from '@expo/vector-icons';
+//import QRcodee from './QRcodeScreen';
 
 export default function ProfileScreen ({navigation, route}, props) {
   ////////Getting data from firebase /////////////
   const user = firebase.auth().currentUser;
   const docRef = firestore.collection('users').doc(user.uid);
 
-  const [profileCard, setCard] = useState({});
+  ////////////////SWITCH///////////////////////
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  /////////////////////////////////////////////
 
+  const [profileCard, setCard] = useState({});
+  const onPress= ()=> { navigation.navigate('QRcode')};
+  
   useEffect(() => {
     getProfile()
 
@@ -62,90 +72,136 @@ export default function ProfileScreen ({navigation, route}, props) {
   }
 
   return (
-      <SafeAreaView style= {styles.container}>
+      <View style= {styles.container}>
+       
+       <View style={styles.profileContainer}>
+        <LinearGradient
+          // Background Linear Gradient
+          colors={['#1079b6', '#129cd2', '#03bcd4']}
+          style={styles.background}
+          
+        />
 
-        <SafeAreaView>
-          <View style={styles.textContainer}>
-            <Text style={styles.textStyle}>
-              Virtual Business card
-            </Text>
-          </View>
+        <TouchableOpacity style={[styles.qrcode]}  onPress = {onPress}>
+           <FontAwesome name="qrcode" color={'black'} size={70} />
+        </TouchableOpacity>
 
+       </View>
 
+        <View style={styles.profileContainer1}>
           <View style={styles.textContainer2}>
             <Text style={styles.textStyle}>
-              Full Name:{'\n'} {profileCard.name}
-            </Text>
-          </View>
-
-          <View style={styles.textContainer2}>
-            <Text style={styles.textStyle}>
-              Company Name:{'\n'} {profileCard.companyName}
-            </Text>
-          </View>
-
-          <View style={styles.textContainer2}>
-            <Text style={styles.textStyle}>
-              Phone Number: {'\n'} {profileCard.phone}
+              <FontAwesome name="user" color={'black'} size={26} />
+              {'\t'}{profileCard.name}
             </Text>
           </View>
 
           <View style={styles.textContainer2}>
             <Text style={styles.textStyle}>
-              Email: {'\n'} {profileCard.email}
+            <FontAwesome name="building" color={'black'} size={26} />
+            {'\t'} {profileCard.companyName}
             </Text>
           </View>
 
           <View style={styles.textContainer2}>
             <Text style={styles.textStyle}>
-              Address:{'\n'} {profileCard.address}
+            <FontAwesome name="phone" color={'black'} size={26} />
+              {'\t'} {profileCard.phone}
             </Text>
           </View>
-        </SafeAreaView>
 
+          <View style={styles.textContainer2}>
+            <Text style={styles.textStyle}>
+            <Icon name="mail" color={'black'} size={26} />
+             {'\t'} {profileCard.email}
+            </Text>
+          </View>
+
+          <View style={styles.textContainer2}>
+            <Text style={styles.textStyle}>
+            <FontAwesome name="map-pin" color={'black'} size={26} />
+            {'\t'} {profileCard.address}
+            </Text>
+          </View>
+          
+        </View>
+        <View style={styles.buttonSwitch}> 
         <Button
-          title= "Add card info"
+          title= "Edit Profile"
           onPress= {()=> {
           navigation.navigate('Register')}}
           color= {Colors.charcoal}
         />
-
-    </SafeAreaView>
+       
+       <Text >Private</Text>
+       <Switch
+        trackColor={{ false: "#767577", true: "#81b0ff" }}
+        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isEnabled}
+      />
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
 container: {
-  flex: 1,
-  justifyContent: 'center',
-  backgroundColor: Colors.steel,
+  flex: 3,
+  backgroundColor: Colors.snow,
 
 },
-textContainer: {
+profileContainer: {
   alignItems: 'center',
-  width: '95%',
-  height: '15%',
-  backgroundColor: Colors.text,
-  borderWidth: 1,
-  marginLeft: 5,
-  // marginTop: 5,
-  marginBottom:20,
-  borderRadius: 15
+  height: '30%'
+},
+background: {
+  position: 'absolute',
+  left: '-3%',
+  top: -150,
+  width: 415,
+  height: 320,
+  borderRadius: 190,
+  
+},
+
+qrcode: {
+  alignItems: 'center',
+  justifyContent:'center',
+  marginTop:'20%',
+  width: '30%',
+  height: '60%',
+  backgroundColor: Colors.snow,
+  borderWidth:.5,
+  borderRadius: 190,
+},
+
+profileContainer1: {
+  backgroundColor: 'transparent',
+  alignItems: 'center',
 },
 textContainer2: {
-  width: '95%',
-  backgroundColor: Colors.silver,
-  borderWidth: 1,
-  marginTop: 5,
-  marginLeft: 5,
-  borderRadius: 20
+  width: '90%',
+  borderBottomWidth: 1,
+  marginBottom: 15,
+  marginLeft: 10,
 },
 
 textStyle: {
   marginLeft: 20,
   marginTop: 20,
-  fontFamily: 'Optima-Italic',
-  fontSize: 23
+  fontFamily: 'Arial',
+  fontSize: 20
 },
+
+buttonSwitch: {
+  flexDirection: 'row',
+  marginTop: 20,
+  alignItems:'center',
+  justifyContent:'space-evenly',
+  fontFamily: 'Arial',
+  fontSize: 15
+}
 
 });
