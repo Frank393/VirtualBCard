@@ -12,6 +12,7 @@ import ScanScreen from './ScanScreen';
 import ProfileScreen from './ProfileScreen';
 import QRcodeScreen from './QRcodeScreen';
 import RegisterScreen from './RegisterScreen';
+import SearchScreen from './SearchScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -43,17 +44,17 @@ const TabScreen = () => (
             ),
           }}
         />
-         {/* <Tab.Screen
-          name="QRcode"
-          component={QrcodeStackScreen}
+        <Tab.Screen
+          name="Search"
+          component={SearchStackScreen}
           options={{
-            tabBarLabel: 'QR Code',
+            tabBarLabel: 'Search',
             tabBarColor: '#6f6a9c',
             tabBarIcon: ({ color }) => (
               <FontAwesome name="search" color={color} size={26} />
             ),
           }}
-        /> */}
+        />
         <Tab.Screen
           name="Profile"
           component={ProfileStackScreen}
@@ -150,6 +151,10 @@ const ProfileStackScreen = ({navigation}) => (
           name="QRcode"
           component={QRcodeScreen}
         />
+        <ProfileStack.Screen
+          name="Register"
+          component={RegisterScreen}
+        />
 
       </ProfileStack.Navigator>
 );
@@ -170,4 +175,22 @@ const QrcodeStackScreen = ({navigation}) => (
           component={QRcodeScreen}
         />
       </QrcodeStack.Navigator>
+);
+//Search screen
+const SearchStack = createStackNavigator();
+const SearchStackScreen = ({navigation}) => (
+    <SearchStack.Navigator screenOptions= {{
+        headerStyle: {
+          backgroundColor: '#6f6a9c',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold'
+        }
+      }}>
+        <SearchStack.Screen
+          name="Search"
+          component={SearchScreen}
+        />
+      </SearchStack.Navigator>
 );
