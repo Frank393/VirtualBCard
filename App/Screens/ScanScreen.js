@@ -29,7 +29,7 @@ export default function ScanScreen() {
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Requesting camera permission</Text>;
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
