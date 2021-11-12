@@ -7,13 +7,18 @@ import {
   SafeAreaView,
   Button,
   TouchableOpacity,
+
 } from 'react-native';
+import { HStack, Checkbox, Center, NativeBaseProvider } from "native-base"
 import Colors from '../Themes/Colors';
 import Metrics from '../Themes/Metrics';
 import firestore from '../../firebase';
 import firebase from 'firebase';
 import ProfileScreen from './ProfileScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+
+//omport { CheckBox } from 'react-native-elements'
 
 export default function RegisterScreen ({navigation, route}) {
   [companyName, setCompany] = useState('');
@@ -21,12 +26,16 @@ export default function RegisterScreen ({navigation, route}) {
   [phone, setPhone] = useState('');
   [email, setEmail] = useState('');
   [address, setAddress] = useState('');
-  [privacy, setPrivacy] = useState('');
+  [privacy, setPrivacy] = useState('Public');
+  
 
   //registering ID
   let user = firebase.auth().currentUser;
   let ref = firestore.collection('users').doc(user.uid);
 
+  ///////////////Privacy
+  const myRef = React.useRef({})  
+  /////////////////////////////////
 
 //uploading the data to firebase
   async function createCard() {
@@ -35,8 +44,9 @@ export default function RegisterScreen ({navigation, route}) {
         companyName: companyName,
         phone: phone,
         email: email,
-        address: address,
-        privacy: privacy
+        privacy:privacy,
+       
+        
       }, { merge: true });
 
       console.log('REGISTERED');
@@ -49,9 +59,24 @@ export default function RegisterScreen ({navigation, route}) {
       navigation.navigate('Profile')
 
   }
+  //////////////////////////////
+
+   const Example = () => {
+    const myRef = React.useRef({})
+    return (
+      <Checkbox
+        value={true}
+        colorScheme="success"
+        onChange={privacy => setPrivacy("Private")}
+      >
+        Private
+      </Checkbox>
+    )
+  }
+  ///////////////////////////////
 
   return (
-    <SafeAreaView style= {styles.container}>
+    <NativeBaseProvider style= {styles.container}>
        <Text style={{fontFamily: 'Optima-Italic', fontSize: 17}}>
           Add your business card information
        </Text>
@@ -89,6 +114,7 @@ export default function RegisterScreen ({navigation, route}) {
         placeholder='Address'
         onChangeText= {address => setAddress(address)}
         />
+      <Example/>
         <TouchableOpacity onPress={createCard}>
           <Icon
             name='ios-add'
@@ -97,7 +123,7 @@ export default function RegisterScreen ({navigation, route}) {
             size = {Metrics.icons.large}
           />
         </TouchableOpacity>
-    </SafeAreaView>
+    </NativeBaseProvider>
   );
 }
 
@@ -120,5 +146,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.cloud,
 
   },
+buttonSwitch: {
+  flexDirection: 'row',
+  marginTop: 20,
+  alignItems:'center',
+  justifyContent:'space-evenly',
+  fontFamily: 'Arial',
+  fontSize: 15
+},
 
 });

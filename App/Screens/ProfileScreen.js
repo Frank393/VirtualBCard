@@ -23,11 +23,6 @@ export default function ProfileScreen ({navigation, route}, props) {
   const user = firebase.auth().currentUser;
   const docRef = firestore.collection('users').doc(user.uid);
 
-  ////////////////SWITCH///////////////////////
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-  /////////////////////////////////////////////
-
   const [profileCard, setCard] = useState({});
   const onPress= ()=> { navigation.navigate('QRcode')};
   
@@ -44,6 +39,8 @@ export default function ProfileScreen ({navigation, route}, props) {
       console.log(err)
     });
   }
+  
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -70,7 +67,7 @@ export default function ProfileScreen ({navigation, route}, props) {
       }
     })
   }
-
+console.log("privacy " + profileCard.privacy);
   return (
       <View style= {styles.container}>
        
@@ -123,6 +120,13 @@ export default function ProfileScreen ({navigation, route}, props) {
             {'\t'} {profileCard.address}
             </Text>
           </View>
+
+          <View style={styles.textContainer2}>
+            <Text style={styles.textStyle}>
+            <FontAwesome name="lock" color={'black'} size={26} />
+            {'\t'} {profileCard.privacy}
+            </Text>
+          </View>
           
         </View>
         <View style={styles.buttonSwitch}> 
@@ -133,14 +137,14 @@ export default function ProfileScreen ({navigation, route}, props) {
           color= {Colors.charcoal}
         />
        
-       <Text >Private</Text>
+       {/* <Text >Private</Text>
        <Switch
         trackColor={{ false: "#767577", true: "#81b0ff" }}
         thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
         ios_backgroundColor="#3e3e3e"
         onValueChange={toggleSwitch}
         value={isEnabled}
-      />
+      /> */}
       </View>
     </View>
   );
