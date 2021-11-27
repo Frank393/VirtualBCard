@@ -13,6 +13,8 @@ import ProfileScreen from './ProfileScreen';
 import QRcodeScreen from './QRcodeScreen';
 import RegisterScreen from './RegisterScreen';
 import SearchScreen from './SearchScreen';
+import qrScan from './qrScan';
+import cardScan from './cardScan';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -38,7 +40,7 @@ const TabScreen = () => (
           component={ScanStackScreen}
           options={{
             tabBarLabel: 'Scanner',
-            tabBarColor: '#37494a',
+            tabBarColor: '#1f35b5',
             tabBarIcon: ({ color }) => (
               <FontAwesome name="camera-retro" color={color} size={26} />
             ),
@@ -96,7 +98,7 @@ const ScanStack = createStackNavigator();
 const ScanStackScreen = ({navigation}) => (
     <ScanStack.Navigator screenOptions= {{
         headerStyle: {
-          backgroundColor: '#37494a',
+          backgroundColor: '#1f35b5',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -106,6 +108,14 @@ const ScanStackScreen = ({navigation}) => (
         <ScanStack.Screen
           name="Scan"
           component={ScanScreen}
+        />
+        <ScanStack.Screen
+          name="QR Code Scanner"
+          component={qrScan}
+        />
+         <ScanStack.Screen
+          name="Business Card Scanner"
+          component={cardScan}
         />
       </ScanStack.Navigator>
 );
@@ -174,8 +184,11 @@ const QrcodeStackScreen = ({navigation}) => (
           name="QRcode"
           component={QRcodeScreen}
         />
+         
       </QrcodeStack.Navigator>
 );
+
+
 //Search screen
 const SearchStack = createStackNavigator();
 const SearchStackScreen = ({navigation}) => (
