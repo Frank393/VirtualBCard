@@ -42,6 +42,7 @@ export default function ScanScreen({navigation, route}, props) {
             name="qrcode"
             color='black'
             size={50}
+            
           />
         </TouchableOpacity>
       </View>
