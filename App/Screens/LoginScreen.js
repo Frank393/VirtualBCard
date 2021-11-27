@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Image ,SafeAreaView } from 'react-native';
 import firestore from '../../firebase';
 import firebase from 'firebase';
 
@@ -42,7 +42,7 @@ export default function LoginScreen({ navigation }) {
   }
 
   return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
 
         <Image style= {{width: '80%', height: '25%'}} source={Logo.logo}/>
         <TextInput
@@ -94,7 +94,7 @@ export default function LoginScreen({ navigation }) {
           color= {Colors.banner}
         />
 
-      </View>
+      </SafeAreaView>
   );
 }
 
@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    // backgroundColor: 'black' 
   },
   logo: {
     flexDirection: 'row',
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 15,
-    padding:10,
+    padding:5,
     width: '95%',
     borderWidth: 1,
     borderColor: Colors.frost,
