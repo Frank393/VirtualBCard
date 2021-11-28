@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   Button,
   TouchableOpacity,
+  ScrollView
 
 } from 'react-native';
 import { HStack, Checkbox, Center, NativeBaseProvider } from "native-base"
@@ -17,6 +18,7 @@ import firebase from 'firebase';
 import ProfileScreen from './ProfileScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import SelectDropdown from 'react-native-select-dropdown'
 
 //omport { CheckBox } from 'react-native-elements'
 
@@ -27,6 +29,11 @@ export default function RegisterScreen ({navigation, route}) {
   [email, setEmail] = useState('');
   [address, setAddress] = useState('');
   [privacy, setPrivacy] = useState('Public');
+  [category, setCategory] = useState('');
+
+  [data, setData] = useState([
+    "Automotive","Business Support & Supplies","Computers & Electronics","Education","Entertainment","Food & Dining","Health & Medicine","Merchants (Retail)","Personal Care & Services"
+  ])
   
 
   //registering ID
@@ -45,6 +52,7 @@ export default function RegisterScreen ({navigation, route}) {
         phone: phone,
         email: email,
         privacy:privacy,
+        category:category,
        
         
       }, { merge: true });
@@ -77,6 +85,7 @@ export default function RegisterScreen ({navigation, route}) {
 
   return (
     <NativeBaseProvider style= {styles.container}>
+      <ScrollView>
        <Text style={{fontFamily: 'Optima-Italic', fontSize: 17}}>
           Add your business card information
        </Text>
@@ -114,6 +123,26 @@ export default function RegisterScreen ({navigation, route}) {
         placeholder='Address'
         onChangeText= {address => setAddress(address)}
         />
+
+        <SelectDropdown
+           buttonStyle={styles.dropMenu}
+           buttonTextStyle={styles.buttonText}
+           defaultButtonText='Business category'
+           data={data}
+           onSelect={(selectedItem, index) => {
+             // console.log('selected', selectedItem, index)
+             {setCategory(selectedItem)}
+ 
+           }}
+           buttonTextAfterSelection={(selectedItem, index) => {
+             console.log('Category:',category)
+             return selectedItem
+           }}
+           rowTextForSelection={(item, index) => {
+             return item
+           }}
+         />
+
       <Example/>
         <TouchableOpacity onPress={createCard}>
           <Icon
@@ -123,6 +152,7 @@ export default function RegisterScreen ({navigation, route}) {
             size = {Metrics.icons.large}
           />
         </TouchableOpacity>
+      </ScrollView>
     </NativeBaseProvider>
   );
 }
@@ -146,13 +176,25 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.cloud,
 
   },
-buttonSwitch: {
-  flexDirection: 'row',
-  marginTop: 20,
-  alignItems:'center',
-  justifyContent:'space-evenly',
-  fontFamily: 'Arial',
-  fontSize: 15
-},
+  buttonSwitch: {
+    flexDirection: 'row',
+    marginTop: 20,
+    alignItems:'center',
+    justifyContent:'space-evenly',
+    fontFamily: 'Arial',
+    fontSize: 15
+  },
+  dropMenu: {
+    width:'98%',
+    height: 40,
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: Colors.cloud,
 
+  },
+  buttonText: {
+    fontSize:13,
+    fontFamily: 'Arial',
+
+  }
 });

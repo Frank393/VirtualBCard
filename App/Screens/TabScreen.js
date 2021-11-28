@@ -98,7 +98,7 @@ const ScanStack = createStackNavigator();
 const ScanStackScreen = ({navigation}) => (
     <ScanStack.Navigator screenOptions= {{
         headerStyle: {
-          backgroundColor: '#1f35b5',
+          backgroundColor: '#1f35b5git',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
