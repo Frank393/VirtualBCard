@@ -24,6 +24,10 @@ export default function SearchScreen({navigation, route}, props) {
   const [profileCard, setCard] = useState({});
   const [search, setSearch] = useState('');
   const [ContactsFilter, setContactsFilter] = useState([]);
+  const [test, settest] = useState({});
+  let user = firebase.auth().currentUser;
+ //let users = firebase.auth().;
+  const docRef = firestore.collection('users').doc(user.uid);
 
   useEffect(() => {
     getContacts()
@@ -34,102 +38,85 @@ export default function SearchScreen({navigation, route}, props) {
     let userContact = [];
     let userList = [];
 
-    let user = firebase.auth().currentUser;
-    let ref = firestore.collection('users').doc(user.uid).collection('contacts');
+    
+  
 
-///////////Getting Contacts //////////////////
-    let contactsSnapshot = await ref.get();
-    contactsSnapshot.forEach((doc) => {
-      userContact.push(doc.data().userContact);
-    });
-    console.log('Contacts', userContact);
 
-///////////////?Getting user id's/////////////////////////
-    const collRef = firestore.collection('users');
+docRef.onSnapshot(querySnapshot => {
+  if(querySnapshot){
+    let snapshot = querySnapshot.data()
+    console.log(snapshot)
+    settest(snapshot);
+  }
+})
 
-    let userSnapshot = await collRef.get();
-    userSnapshot.forEach((doc) => {
-      userList.push(doc.id);
-    });
-    console.log('Users ', userList);
-/////////////////////Searching for equal id's//////////////////////////////////
-    let contactList = [];
 
-    userContact.forEach((element1) => {
-      userList.forEach((element2) => {
-        if (element1 === element2) {
-        contactList.push(element1)
-        }
-      });
-    });
-   console.log("IGUALES ", contactList);
-    //////////////////Comparing database id's with contact id's/////////////////
-    let contactData = [];
-    let userContactSnapshot = await collRef.get();
-
-    // contactList.forEach((item, i) => {
-    //   userContactSnapshot.forEach((doc) => {
-    //     if (doc.id === contactList[i]) {
-    //       console.log("DATA", doc.data(), ' ID ', doc.id);
-    //       contactData.push(doc.data());
-    //     }
-    //   });
-    // });
-
-    // ===================================================
-      contactList.forEach((item, i) => {
-        collRef.onSnapshot(function(querySnapshot){
-          querySnapshot.forEach(function(doc){
-            if (doc.id === contactList[i]) {
-              console.log("DATA", doc.data(), ' ID ', doc.id);
-              contactData.push(doc.data());
-            }
-          });
+const markers = [];
+      await firebase.firestore().collection('users').get()
+        .then(querySnapshot => {
+          querySnapshot.docs.forEach(doc => {
+          markers.push(doc.id,doc.data());
         });
       });
 
-    // ===================================================
 
-    console.log("LISTA CON DATOS: ", contactData);
-    setContacts(contactData);
-    setContactsFilter(contactData);
-  }
-
-
-
-  // import all the components we are going to use
+        // console.log("CONTACT PRIVAYC:",markers);
 
  
-    
-    //const [masterDataSource, setMasterDataSource] = useState([]);
-  
-    // useEffect(() => {
-    //   fetch('https://jsonplaceholder.typicode.com/posts')
-    //     .then((response) => response.json())
-    //     .then((responseJson) => {
-    //       setFilteredDataSource(responseJson);
-    //       setContacts(responseJson);
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // }, []);
-  
+let ref = firestore.collection('users').doc(user.uid).collection('contacts');
+ 
+
+
+// console.log('test console log !!!!!!!!!!!!!!!!!!! ');
+
+// console.log('User list =', userList ,'user list done' );
+
+
+// console.log('Other Privacy  = ',  test.privacy);
+
+/////////////////////////////////////
+const P_Users = [];
+
+markers.forEach((item, i) => {
+  if ("Public" === markers[i].privacy) {
+    P_Users.push(markers[i]);
+  }
+});
+console.log("P_Users:",P_Users);
+
+    setContacts(P_Users);
+    setContactsFilter(P_Users);
+  }
+
     const searchFilterFunction = (text) => {
       // Check if searched text is not blank
       if (text) {
         // Inserted text is not blank
         // Filter the masterDataSource and update FilteredDataSource
 
-
+        //let itemData = '' ; 
+        const textData = text.toUpperCase();
         /// search for category item.category 
         const newData = contacts.filter(function (item) {
           // Applying filter for the inserted text in search bar
-          const itemData = item.name
-            ? item.name.toUpperCase()
-            : ''.toUpperCase();
-          const textData = text.toUpperCase();
-          return itemData.indexOf(textData) > -1;
+          
+          const itemData = item.name ? item.name.toUpperCase(): ''.toUpperCase(); 
+          const itemData2 = item.companyName ? item.companyName.toUpperCase(): ''.toUpperCase(); 
+          const itemData3 = item.category ? item.category.toUpperCase(): ''.toUpperCase();
+          
+            if (itemData.indexOf(textData) > -1){
+              return itemData.indexOf(textData) > -1;
+            }else if (itemData2.indexOf(textData) > -1){
+              return itemData2.indexOf(textData) > -1;
+            }else if (itemData3.indexOf(textData) > -1){
+              return itemData3.indexOf(textData) > -1;
+            }
+
+           
+
+
+
+          
         });
         setContactsFilter(newData);
         setSearch(text);
@@ -140,14 +127,17 @@ export default function SearchScreen({navigation, route}, props) {
         setSearch(text);
       }
     };
-  
+   // item.companyName ? item.companyName.toUpperCase(): ''.toUpperCase(); 
     const ItemView  = ({ item }) => {
       return (
         // Flat List Item
         <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-          {item.companyName}
-          {'.'}
+          {'Company name: '}
+          {item.companyName.toUpperCase()}
+          {', Owner name: '}
           {item.name.toUpperCase()}
+          {', Category: '}
+          {item.category.toUpperCase()}
         </Text>
       );
     };
@@ -167,7 +157,7 @@ export default function SearchScreen({navigation, route}, props) {
   
     const getItem = (item) => {
       // Function for click on an item
-      alert('Id : ' + item.companyName + ' Title : ' + item.name);
+      alert('Company name : ' + item.companyName + '\nOwner name : ' + item.name + '\nEmail : ' + item.email);
     };
   
     return (
