@@ -82,7 +82,7 @@ markers.forEach((item, i) => {
     P_Users.push(markers[i]);
   }
 });
-console.log("P_Users:",P_Users);
+console.log("P_Users:",typeof(P_Users));
 
     setContacts(P_Users);
     setContactsFilter(P_Users);
