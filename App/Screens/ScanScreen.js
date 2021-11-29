@@ -7,7 +7,8 @@ import {
   SafeAreaView,
   Button,
   TouchableOpacity,
-  Switch
+  Switch,
+  ScrollView
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -20,18 +21,20 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 export default function ScanScreen({navigation, route}, props) {
   const scanQR= ()=> { navigation.navigate('QR Code Scanner')};
   const scanCard= ()=> { navigation.navigate('Business Card Scanner')};
+  const scanNfc= ()=> { navigation.navigate('NFC')};
 
   return (
     <View style= {styles.container}> 
+    <ScrollView>
       <View style = {styles.cardScan}>
         <Text>Business Card Scanner</Text>
-      <TouchableOpacity onPress={scanCard}>
-          <Icon
-            name="card"
-            color='black'
-            size={50}
-          />
-        </TouchableOpacity>
+        <TouchableOpacity onPress={scanCard}>
+            <Icon
+              name="card"
+              color='black'
+              size={50}
+            />
+          </TouchableOpacity>
       </View>
 
       <View style = {styles.qrCode}>
@@ -46,6 +49,18 @@ export default function ScanScreen({navigation, route}, props) {
           />
         </TouchableOpacity>
       </View>
+
+      <View style = {styles.nfcCard}>
+        <Text>Near Field Communication</Text>
+        <TouchableOpacity onPress={scanNfc}>
+            <MaterialCommunityIcons
+              name="cellphone-nfc"
+              color='black'
+              size={50}
+            />
+        </TouchableOpacity>
+      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -60,7 +75,7 @@ container: {
 },
 cardScan: {
   width: '50%',
-  height: '50%',
+  height: '98%',
   backgroundColor:'#d3d3d3',
   borderRadius: 30,
   justifyContent: 'center',
@@ -71,15 +86,24 @@ cardScan: {
 qrCode: {
   alignSelf:'flex-end',
   width: '50%',
-  height: '50%',
+  height: '98%',
   backgroundColor:'#d3d3d3',
   borderRadius: 30,
   justifyContent: 'center',
   alignItems:'center',
   borderWidth: 1,
   borderColor: '#a6a2a2',
-  
-  
+},
+nfcCard: {
+ // alignSelf:'flex-end',
+  width: '50%',
+  height: '98%',
+  backgroundColor:'#d3d3d3',
+  borderRadius: 30,
+  justifyContent: 'center',
+  alignItems:'center',
+  borderWidth: 1,
+  borderColor: '#a6a2a2',
 },
 
 

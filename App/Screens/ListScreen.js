@@ -1,21 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  SafeAreaView,
-  Button,
-  FlatList,
-} from 'react-native';
+// inside components/list.tsx
+import  React, {useState, useLayoutEffect, useEffect} from "react";
+import { Text, View, StyleSheet, Animated, Dimensions,TextInput } from "react-native";
+import { Avatar, Surface } from "react-native-paper";
+import images from '../Themes/Images'
 import Colors from '../Themes/Colors';
 import Metrics from '../Themes/Metrics';
 import firestore from '../../firebase';
 import firebase from 'firebase';
 
-export default function ListScreen({navigation}) {
+
+
+
+const { height } = Dimensions.get("screen");
+
+
+export default function List() {
+
   const [contacts, setContacts]= useState([]);
   const [profileCard, setCard] = useState({});
+  const [search, setSearch] = useState('');
+  const [ContactsFilter, setContactsFilter] = useState([]);
+  const [test, settest] = useState({});
 
   useEffect(() => {
     getContacts()
@@ -59,15 +64,6 @@ export default function ListScreen({navigation}) {
     let contactData = [];
     let userContactSnapshot = await collRef.get();
 
-    // contactList.forEach((item, i) => {
-    //   userContactSnapshot.forEach((doc) => {
-    //     if (doc.id === contactList[i]) {
-    //       console.log("DATA", doc.data(), ' ID ', doc.id);
-    //       contactData.push(doc.data());
-    //     }
-    //   });
-    // });
-
     // ===================================================
       contactList.forEach((item, i) => {
         collRef.onSnapshot(function(querySnapshot){
@@ -84,63 +80,133 @@ export default function ListScreen({navigation}) {
 
     console.log("LISTA CON DATOS: ", contactData);
     setContacts(contactData);
+    setContactsFilter(contactData);
   }
+  //===============================================
+  const searchFilterFunction = (text) => {
+    // Check if searched text is not blank
+    if (text) {
 
-  const _keyExtractor = (item, index) => item.id;
-
-  const renderItem = ({item}) => {
+      /// search for category item.category 
+      const newData = contacts.filter(function (item) {
+        // Applying filter for the inserted text in search bar
+        const itemData = item.name
+          ? item.name.toUpperCase()
+          : ''.toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      setContactsFilter(newData);
+      setSearch(text);
+    } else {
+      // Inserted text is blank
+      // Update FilteredDataSource with masterDataSource
+      setContactsFilter(contacts);
+      setSearch(text);
+    }
+  };
+  //===============================================
+  const ItemSeparatorView = () => {
     return (
-      <SafeAreaView style={styles.textContainer2}>
-        <Text style={styles.textStyle}>Company: {item.companyName} </Text>
-        <Text style={styles.textStyle}>Name: {item.name} </Text>
-        <Text style={styles.textStyle}>Phone: {item.phone} </Text>
-        <Text style={styles.textStyle}>Email: {item.email} </Text>
-        <Text style={styles.textStyle}>Address: {item.address} </Text>
-      </SafeAreaView>
+      // Flat List Item Separator
+      <View
+        style={{
+          height: 0.5,
+          width: '100%',
+          backgroundColor: '#C8C8C8',
+        }}
+      />
     );
   }
 
+  const scrollY = React.useRef(new Animated.Value(0)).current;
+
   return (
-    <SafeAreaView style={styles.container}>
-
-      <FlatList
-        data={contacts}
-        renderItem={renderItem}
-        keyExtractor={_keyExtractor}
+    <View style={styles.container}>
+      <TextInput
+            style={styles.textInputStyle}
+            onChangeText={(text) => searchFilterFunction(text)}
+            value={search}
+            underlineColorAndroid="transparent"
+            placeholder="Search Here"
+          />
+      <Animated.FlatList
+       onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        { useNativeDriver: true }
+      )}
+        data={ContactsFilter}
+        keyExtractor={(item, index) => item.id}
+        renderItem={({ item,index}) => {
+          const inputRange = [
+            -1,
+            0,
+            (height * 0.1 + 15) * index,
+            (height * 0.1 + 15) * (index + 3),
+          ];
+          const scale = 1;
+          const opacity = scrollY.interpolate({
+            inputRange,
+            outputRange: [1, 1, 1, 0],
+          });
+          const Offset = scrollY.interpolate({
+            inputRange,
+            outputRange: [0, 0, 0, 500],
+          });
+          return (
+        
+            <Animated.View
+              style={{
+                transform: [{ scale: scale }, { translateX: Offset }],
+                opacity: opacity,
+              }}
+            >
+              <Surface style={styles.surface}>
+                <View style={{ flex: 0.3, justifyContent: "center" }}>
+                  <Avatar.Image size={42} source={images.logo} />
+                </View>
+                <View
+                  style={{
+                    flex: 0.7,
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text style={{ fontSize: 22, fontWeight: "bold" }}>
+                    {item.name}
+                  </Text>
+                  <Text style={{ fontSize: 14 }}>{item.companyName}</Text>
+                </View>
+              </Surface>
+            </Animated.View>
+          );
+        }}
       />
-
-    </SafeAreaView>
+    </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    flexDirection: 'column',
-    backgroundColor: 'white',
-    alignItems: 'stretch'
+    justifyContent: "center",
   },
-  item: {
-    backgroundColor: '#d0c1ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+  surface: {
+    height: height * 0.1,
+    marginTop: 15,
+    padding: 8,
+    marginHorizontal: 10,
+    borderRadius: 8,
+    flexDirection: "row",
   },
-  title: {
-    fontSize: 32,
-  },
-  textContainer2: {
-    width: '95%',
-    backgroundColor: Colors.silver,
+  textInputStyle: {
+    height: 40,
     borderWidth: 1,
-    marginTop: 5,
-    marginLeft: 5,
-    borderRadius: 20
-  },
-  textStyle: {
-    marginLeft: 20,
-    fontFamily: 'Optima-Italic',
-    fontSize: 15
+    paddingLeft: 20,
+    margin: 5,
+    borderColor: '#009688',
+    backgroundColor: '#FFFFFF',
   },
 });
