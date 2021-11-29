@@ -15,6 +15,7 @@ import RegisterScreen from './RegisterScreen';
 import SearchScreen from './SearchScreen';
 import qrScan from './qrScan';
 import cardScan from './cardScan';
+import ContactsScreen from './ContactsScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -25,7 +26,7 @@ const TabScreen = () => (
         activeColor="#fff"
       >
         <Tab.Screen
-          name="List"
+          name="Contacts"
           component={ListStackScreen}
           options={{
             tabBarLabel: 'Contacts',
@@ -88,7 +89,7 @@ const ListStackScreen = ({navigation}) => (
       }}>
         <ListStack.Screen
         name="Contacts"
-        component={ListScreen}
+        component={ContactsScreen}
         />
       </ListStack.Navigator>
 );
