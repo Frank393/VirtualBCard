@@ -4,16 +4,11 @@ import QRCode from 'react-native-qrcode-svg';
 import firebase from 'firebase';
 import images from '../Themes/Images';
 import Colors from '../Themes/Colors';
-//import Metrics from '../Themes/Metrics';
-//import RNFetchBlob from 'rn-fetch-blob'
-//import fs from 'react-native-fs';
 import * as Sharing from 'expo-sharing';
 import { captureRef } from 'react-native-view-shot';
 
 
 
-//import ViewShot from "react-native-view-shot";
-//import Share from 'react-native-share'
 
 export default function QRcodeScreen ({navigation, route}){
   //Getting the uid for the user
@@ -36,46 +31,7 @@ export default function QRcodeScreen ({navigation, route}){
   };
 
 
-  // var sharing = () => {
-  // Sharing.shareAsync(base64Logo)
-  // }
-  // var onSave = () => {
-  //   viewShot.current.capture().then(uri => {
-  //    //Here you can write your logic of sharing or saving it on the device, I have used Share module 
-  //    Share.share({
-  //      message: "bob",
-  //       url: "https://i.imgur.com/7RhCHg2.png",
-      
-       
-       
-  //    });
-  //   });
-  //  }
-    
-  
-  // const onShare = async () => {
-  //   viewShot.current.capture().then(uri => {
-      
-  //   });
-  //   try {
-      
-  //     const result = await Share.share({
-  //       message: 'React Native | A framework for building native apps using React',
-  //       url: uri,
-  //     });
-  //     if (result.action === Share.sharedAction) {
-  //       if (result.activityType) {
-  //         // shared with activity type of result.activityType
-  //       } else {
-  //         // shared
-  //       }
-  //     } else if (result.action === Share.dismissedAction) {
-  //       // dismissed
-  //     }
-  //   } catch (error) {
-  //     alert(error.message);
-  //   }
-  // };
+ 
 
   return(
     <View style={styles.MainContainer}>
@@ -101,22 +57,12 @@ export default function QRcodeScreen ({navigation, route}){
       
       
       </View>
-      
-      
      
       </View>
       <Button onPress={shareDummyImage} title="Share" />
       </View>
       
-
-
   );
-
-
-
-
-
-
 
 
 }
