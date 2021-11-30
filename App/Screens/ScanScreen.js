@@ -25,7 +25,7 @@ export default function ScanScreen({navigation, route}, props) {
 
   return (
     <View style= {styles.container}> 
-    <ScrollView>
+    
       <View style = {styles.cardScan}>
         <Text>Business Card Scanner</Text>
         <TouchableOpacity onPress={scanCard}>
@@ -60,7 +60,7 @@ export default function ScanScreen({navigation, route}, props) {
             />
         </TouchableOpacity>
       </View>
-      </ScrollView>
+      
     </View>
   );
 }
@@ -75,7 +75,7 @@ container: {
 },
 cardScan: {
   width: '50%',
-  height: '98%',
+  height: '30%',
   backgroundColor:'#d3d3d3',
   borderRadius: 30,
   justifyContent: 'center',
@@ -86,7 +86,7 @@ cardScan: {
 qrCode: {
   alignSelf:'flex-end',
   width: '50%',
-  height: '98%',
+  height: '30%',
   backgroundColor:'#d3d3d3',
   borderRadius: 30,
   justifyContent: 'center',
@@ -97,7 +97,7 @@ qrCode: {
 nfcCard: {
  // alignSelf:'flex-end',
   width: '50%',
-  height: '98%',
+  height: '30%',
   backgroundColor:'#d3d3d3',
   borderRadius: 30,
   justifyContent: 'center',
