@@ -1,20 +1,45 @@
-import React, { Component, useState } from 'react';
-import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, } from 'react-native';
+import React, { Component, useState,useRef } from 'react';
+import { Text, Image, View, StyleSheet, SafeAreaView, TouchableOpacity, Button,CameraRoll , ToastAndroid } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import firebase from 'firebase';
-import images from '../Themes/Images'
+import images from '../Themes/Images';
 import Colors from '../Themes/Colors';
-import Metrics from '../Themes/Metrics';
+import * as Sharing from 'expo-sharing';
+import { captureRef } from 'react-native-view-shot';
+
+
+
 
 export default function QRcodeScreen ({navigation, route}){
   //Getting the uid for the user
+
   let user = firebase.auth().currentUser;
-  let logo = images.logo
+  let logo = images.logo;
+  const viewRef = useRef();
+
+  const shareDummyImage = async () => {
+    try {
+      const uri = await captureRef(viewRef, {
+        format: 'png',
+        quality: 0.7,
+      });
+      
+        await Sharing.shareAsync( uri );
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
+ 
 
   return(
     <View style={styles.MainContainer}>
+      
+    <View style={styles.MainContainer} ref={viewRef}>
       <Text style={{fontSize: 20}}>Scan the QR Code to save the contact!</Text>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}} >
         <QRCode
           logo={logo}
           logoBackgroundColor={'white'}
@@ -28,9 +53,18 @@ export default function QRcodeScreen ({navigation, route}){
           color="black"
           backgroundColor="white"
         />
+
+      
+      
       </View>
+     
       </View>
+      <Button onPress={shareDummyImage} title="Share" />
+      </View>
+      
   );
+
+
 }
 
 // export default QRcodeScreen;
