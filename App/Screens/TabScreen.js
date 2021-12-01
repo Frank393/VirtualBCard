@@ -15,7 +15,6 @@ import RegisterScreen from './RegisterScreen';
 import SearchScreen from './SearchScreen';
 import qrScan from './qrScan';
 import cardScan from './cardScan';
-import nfcScan from './nfcScan';
 import ContactsScreen from './ContactsScreen';
 
 const Tab = createMaterialBottomTabNavigator();
@@ -119,10 +118,7 @@ const ScanStackScreen = ({navigation}) => (
           name="Business Card Scanner"
           component={cardScan}
         />
-        <ScanStack.Screen
-          name="NFC"
-          component={nfcScan}
-        />
+
       </ScanStack.Navigator>
 );
 
