@@ -86,7 +86,7 @@ qrCode: {
   borderColor: '#a6a2a2',
 },
 surface: {
-  height: height * 0.36,
+  height: height * 0.34,
   marginTop: 15,
   padding: 8,
   marginHorizontal: 10,

@@ -193,7 +193,7 @@ export default function List() {
                   <Text style={{ fontSize: 22, fontWeight: "bold" }} onPress={() => getItem(item)}>
                     {item.name}
                   </Text>
-                  <Text style={{ fontSize: 14 }}>{item.companyName}onPress={() => getItem(item)}</Text>
+                  <Text style={{ fontSize: 14 }} onPress={() => getItem(item)} >  {item.companyName} </Text>
                 </View>
               </Surface>
             </Animated.View>
