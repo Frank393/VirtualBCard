@@ -4,63 +4,54 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
-  Button,
   TouchableOpacity,
-  Switch,
-  ScrollView
+  Dimensions,
+  ImageBackground
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import firestore from '../../firebase';
-import firebase from 'firebase';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Avatar, Surface } from "react-native-paper";
+
+const { height } = Dimensions.get("screen");
 
 /////SE SUPONE QUE FUNCIONE
 export default function ScanScreen({navigation, route}, props) {
   const scanQR= ()=> { navigation.navigate('QR Code Scanner')};
   const scanCard= ()=> { navigation.navigate('Business Card Scanner')};
-  const scanNfc= ()=> { navigation.navigate('NFC')};
 
   return (
     <View style= {styles.container}> 
-    
-      <View style = {styles.cardScan}>
-        <Text>Business Card Scanner</Text>
-        <TouchableOpacity onPress={scanCard}>
-            <Icon
-              name="card"
+    <ImageBackground source={require('../Images/background.jpeg')} style={styles.image}>
+      {/* <View style = {styles.cardScan}> */}
+        <Surface style={styles.surface}>
+          <Text style={{fontSize:20}}>Business Card Scanner</Text>
+          <TouchableOpacity onPress={scanCard}>
+              <Icon
+                name="card"
+                color='black'
+                size={60}
+              />
+            </TouchableOpacity>
+        </Surface>
+      {/* </View> */}
+
+
+      {/* <View style = {styles.qrCode}> */}
+      <Surface style={styles.surface}>
+        <Text style={{fontSize:20}}>QR Code Scanner</Text>
+        <TouchableOpacity onPress={scanQR}>
+            <FontAwesome
+            
+              name="qrcode"
               color='black'
-              size={50}
+              size={60}
+              
             />
           </TouchableOpacity>
-      </View>
-
-      <View style = {styles.qrCode}>
-      <Text>QR Code Scanner</Text>
-      <TouchableOpacity onPress={scanQR}>
-          <FontAwesome
-           
-            name="qrcode"
-            color='black'
-            size={50}
-            
-          />
-        </TouchableOpacity>
-      </View>
-
-      <View style = {styles.nfcCard}>
-        <Text>Near Field Communication</Text>
-        <TouchableOpacity onPress={scanNfc}>
-            <MaterialCommunityIcons
-              name="cellphone-nfc"
-              color='black'
-              size={50}
-            />
-        </TouchableOpacity>
-      </View>
-      
+        </Surface>
+      {/* </View> */}
+      </ImageBackground>
     </View>
   );
 }
@@ -69,7 +60,7 @@ const styles = StyleSheet.create({
 
 container: {
   flex:1,
-  margin: 10
+  //margin: 10
 
 
 },
@@ -94,18 +85,22 @@ qrCode: {
   borderWidth: 1,
   borderColor: '#a6a2a2',
 },
-nfcCard: {
- // alignSelf:'flex-end',
-  width: '50%',
-  height: '30%',
-  backgroundColor:'#d3d3d3',
-  borderRadius: 30,
-  justifyContent: 'center',
+surface: {
+  height: height * 0.36,
+  marginTop: 15,
+  padding: 8,
+  marginHorizontal: 10,
+  borderRadius: 8,
   alignItems:'center',
-  borderWidth: 1,
-  borderColor: '#a6a2a2',
-},
+  justifyContent:'center',
+  backgroundColor:'#b0d0ff'
 
+},
+image: {
+  flex: 1,
+  resizeMode: "cover",
+  justifyContent: "center"
+},
 
 });
 

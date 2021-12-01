@@ -6,7 +6,8 @@ import {
   SafeAreaView,
   Button,
   TouchableOpacity,
-  Switch
+  Switch,
+  ImageBackground
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Colors from '../Themes/Colors';
@@ -70,7 +71,7 @@ export default function ProfileScreen ({navigation, route}, props) {
 console.log("privacy " + profileCard.privacy);
   return (
       <View style= {styles.container}>
-       
+       <ImageBackground source={require('../Images/background.jpeg')} style={styles.image}>
        <View style={styles.profileContainer}>
         <LinearGradient
           // Background Linear Gradient
@@ -84,7 +85,7 @@ console.log("privacy " + profileCard.privacy);
         </TouchableOpacity>
 
        </View>
-
+<View style={styles.square}>
         <View style={styles.profileContainer1}>
           <View style={styles.textContainer2}>
             <Text style={styles.textStyle}>
@@ -129,23 +130,13 @@ console.log("privacy " + profileCard.privacy);
           </View>
           
         </View>
-        <View style={styles.buttonSwitch}> 
-        <Button
-          title= "Edit Profile"
-          onPress= {()=> {
-          navigation.navigate('Register')}}
-          color= {Colors.charcoal}
-        />
-       
-       {/* <Text >Private</Text>
-       <Switch
-        trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      /> */}
-      </View>
+  </View>
+        <TouchableOpacity style={styles.editButton} onPress= {()=> {
+          navigation.navigate('Edit Business Information')}}>
+         <Text style={{fontSize:20}}>Edit</Text>
+        </TouchableOpacity>
+
+      </ImageBackground>
     </View>
   );
 }
@@ -162,12 +153,18 @@ profileContainer: {
 },
 background: {
   position: 'absolute',
-  left: '-3%',
+ // left: '-3%',
   top: -150,
-  width: 415,
-  height: 320,
+  width: '110%',
+  height: '150%',
   borderRadius: 190,
   
+},
+square: {
+  margin:10,
+  backgroundColor:'white',
+  borderRadius:5
+
 },
 
 qrcode: {
@@ -199,13 +196,21 @@ textStyle: {
   fontSize: 20
 },
 
-buttonSwitch: {
-  flexDirection: 'row',
-  marginTop: 20,
+editButton: {
+  width:'20%',
+  height:'5%',
+  alignSelf:'center',
   alignItems:'center',
-  justifyContent:'space-evenly',
-  fontFamily: 'Arial',
-  fontSize: 15
-}
+  justifyContent:'center',
+  backgroundColor:'#b33953',
+  borderWidth:0.5,
+  borderRadius:20,
+  marginBottom:15
+},
+image: {
+  flex: 1,
+  resizeMode: "cover",
+  justifyContent: "center"
+},
 
 });

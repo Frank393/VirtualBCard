@@ -1,21 +1,15 @@
 import React, { Component, useState, useLayoutEffect, useEffect} from "react";
 
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  TextInput,
-} from "react-native";
+import { Text, View, SafeAreaView, FlatList ,StyleSheet, Animated, Dimensions,RefreshControl,TextInput,Alert, ImageBackground } from "react-native";
 import _ from "lodash";
-import { ListItem, SearchBar, Avatar } from "react-native-elements";
-import { getUsers, contains } from "./index";
+import { ListItem, SearchBar } from "react-native-elements";
+import { Avatar, Surface } from "react-native-paper";
 import firestore from '../../firebase';
 import firebase from 'firebase';
 import 'firebase/firestore';
+import images from '../Themes/Images'
+
+const { height } = Dimensions.get("screen");
 
 
 export default function SearchScreen({navigation, route}, props) {
@@ -25,6 +19,8 @@ export default function SearchScreen({navigation, route}, props) {
   const [search, setSearch] = useState('');
   const [ContactsFilter, setContactsFilter] = useState([]);
   const [test, settest] = useState({});
+  const [refreshing, setRefreshing] = useState(true);
+
   let user = firebase.auth().currentUser;
  //let users = firebase.auth().;
   const docRef = firestore.collection('users').doc(user.uid);
@@ -84,6 +80,8 @@ markers.forEach((item, i) => {
 });
 console.log("P_Users:",typeof(P_Users));
 
+    setRefreshing(false);
+
     setContacts(P_Users);
     setContactsFilter(P_Users);
   }
@@ -131,14 +129,35 @@ console.log("P_Users:",typeof(P_Users));
     const ItemView  = ({ item }) => {
       return (
         // Flat List Item
-        <Text style={styles.itemStyle} onPress={() => getItem(item)}>
-          {'Company name: '}
-          {item.companyName.toUpperCase()}
-          {', Owner name: '}
-          {item.name.toUpperCase()}
-          {', Category: '}
-          {item.category.toUpperCase()}
-        </Text>
+        // <Text style={styles.itemStyle} onPress={() => getItem(item)}>
+        //   {'Company name: '}
+        //   {item.companyName.toUpperCase()}
+        //   {', Owner name: '}
+        //   {item.name.toUpperCase()}
+        //   {', Category: '}
+        //   {item.category.toUpperCase()}
+        // </Text>
+        <Animated.View>
+        
+        <Surface style={styles.surface}>
+          <View style={{ flex: 0.3, justifyContent: "center" }}>
+            <Avatar.Image size={42} source={images.logo} />
+          </View>
+          <View
+            style={{
+              flex: 0.7,
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ fontSize: 14 }} onPress={() => getItem(item)}>
+              {item.name}
+            </Text>
+            <Text style={{ fontSize: 14 }} onPress={() => getItem(item)}>{item.companyName}</Text>
+            <Text style={{ fontSize: 14 }} onPress={() => getItem(item)}>{item.category}</Text>
+          </View>
+        </Surface>
+      </Animated.View>
       );
     };
   
@@ -146,6 +165,7 @@ console.log("P_Users:",typeof(P_Users));
       return (
         // Flat List Item Separator
         <View
+
           style={{
             height: 0.5,
             width: '100%',
@@ -156,12 +176,19 @@ console.log("P_Users:",typeof(P_Users));
     };
   
     const getItem = (item) => {
+      Alert.alert(
+        item.companyName,
+        "Owner: "+item.name +
+        "\nEmail: "+item.email+ "\n Phone:"+item.phone+" \nCategory:"+item.category
+      
+      );
       // Function for click on an item
-      alert('Company name : ' + item.companyName + '\nOwner name : ' + item.name + '\nEmail : ' + item.email);
+      // alert('Company name : ' + item.companyName + '\nOwner name : ' + item.name + '\nEmail : ' + item.email+'Phone: '+ item.phone);
     };
   
     return (
       <SafeAreaView style={{ flex: 1 }}>
+        <ImageBackground source={require('../Images/background.jpeg')} style={styles.image}>
         <View style={styles.container}>
           <TextInput
             style={styles.textInputStyle}
@@ -175,25 +202,40 @@ console.log("P_Users:",typeof(P_Users));
             keyExtractor={(item, index) => index.toString()}
             ItemSeparatorComponent={ItemSeparatorView}
             renderItem={ItemView}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={getContacts} />
+            }
           />
-        </View>
+         </View>
+        </ImageBackground>
       </SafeAreaView>
     );
   };
   
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: 'white',
+      flex: 1,
+      justifyContent: "center",
     },
-    itemStyle: {
-      padding: 10,
+    surface: {
+      height: height * 0.1,
+      marginTop: 15,
+      padding: 8,
+      marginHorizontal: 10,
+      borderRadius: 8,
+      flexDirection: "row",
     },
     textInputStyle: {
       height: 40,
       borderWidth: 1,
       paddingLeft: 20,
       margin: 5,
-      borderColor: '#009688',
+      borderColor: '#7cb1e6',
       backgroundColor: '#FFFFFF',
+    },
+    image: {
+      flex: 1,
+      resizeMode: "cover",
+      justifyContent: "center"
     },
   });
