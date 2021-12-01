@@ -41,7 +41,7 @@ const TabScreen = () => (
           component={ScanStackScreen}
           options={{
             tabBarLabel: 'Scanner',
-            tabBarColor: '#1f35b5',
+            tabBarColor: '#87d6ce',
             tabBarIcon: ({ color }) => (
               <FontAwesome name="camera-retro" color={color} size={26} />
             ),
@@ -52,7 +52,7 @@ const TabScreen = () => (
           component={SearchStackScreen}
           options={{
             tabBarLabel: 'Search',
-            tabBarColor: '#6f6a9c',
+            tabBarColor: '#7cb1e6',
             tabBarIcon: ({ color }) => (
               <FontAwesome name="search" color={color} size={26} />
             ),
@@ -99,7 +99,7 @@ const ScanStack = createStackNavigator();
 const ScanStackScreen = ({navigation}) => (
     <ScanStack.Navigator screenOptions= {{
         headerStyle: {
-          backgroundColor: '#1f35b5',
+          backgroundColor: '#87d6ce',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {
@@ -136,7 +136,7 @@ const RegisterStackScreen = ({navigation}) => (
         }
       }}>
         <RegisterStack.Screen
-          name="Register"
+          name="Edit Business Information"
           component={RegisterScreen}
         />
       </RegisterStack.Navigator>
@@ -164,7 +164,7 @@ const ProfileStackScreen = ({navigation}) => (
           component={QRcodeScreen}
         />
         <ProfileStack.Screen
-          name="Register"
+          name="Edit Business Information"
           component={RegisterScreen}
         />
 
@@ -196,7 +196,7 @@ const SearchStack = createStackNavigator();
 const SearchStackScreen = ({navigation}) => (
     <SearchStack.Navigator screenOptions= {{
         headerStyle: {
-          backgroundColor: '#6f6a9c',
+          backgroundColor: '#7cb1e6',
         },
         headerTintColor: '#fff',
         headerTitleStyle: {

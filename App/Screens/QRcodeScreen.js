@@ -59,7 +59,9 @@ export default function QRcodeScreen ({navigation, route}){
       </View>
      
       </View>
-      <Button onPress={shareDummyImage} title="Share" />
+      <TouchableOpacity style={styles.buttonStyle} onPress={shareDummyImage} >
+        <Text style={{fontSize:20}}>Share</Text>
+         </TouchableOpacity>
       </View>
       
   );
@@ -71,7 +73,6 @@ export default function QRcodeScreen ({navigation, route}){
 const styles = StyleSheet.create({
   MainContainer: {
     flex: 1,
-    margin: 10,
     alignItems: 'center',
     paddingTop: 40,
     backgroundColor: Colors.snow
@@ -96,4 +97,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
   },
+  buttonStyle:{
+    alignItems:'center',
+    justifyContent:'center',
+    backgroundColor:'#87d6ce',
+    width:70,
+    height:30,
+    borderRadius:20,
+    marginBottom:20
+  }
 });

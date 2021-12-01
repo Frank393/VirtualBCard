@@ -1,6 +1,6 @@
 // inside components/list.tsx
 import  React, {useState, useLayoutEffect, useEffect} from "react";
-import { Text, View, SafeAreaView, FlatList ,StyleSheet, Animated, Dimensions,TextInput } from "react-native";
+import { Text, View, SafeAreaView, FlatList ,StyleSheet, Animated, Dimensions,RefreshControl,TextInput,ImageBackground,Alert } from "react-native";
 import { Avatar, Surface } from "react-native-paper";
 import images from '../Themes/Images'
 import Colors from '../Themes/Colors';
@@ -21,8 +21,10 @@ export default function List() {
   const [search, setSearch] = useState('');
   const [ContactsFilter, setContactsFilter] = useState([]);
   const [test, settest] = useState({});
+  const [refreshing, setRefreshing] = useState(true);
   let user = firebase.auth().currentUser;
   const docRef = firestore.collection('users').doc(user.uid);
+  
 
   useEffect(() => {
     getContacts()
@@ -42,6 +44,10 @@ export default function List() {
       userContact.push(doc.data().userContact);
     });
     console.log('Contacts', userContact);
+
+    //////////////////////////OCR contacts///////////////////////
+   
+    /////////////////////////////////////////////////////////////
 
 ///////////////?Getting user id's/////////////////////////
     const collRef = firestore.collection('users');
@@ -88,26 +94,28 @@ export default function List() {
       
       
       const markers = [];
-            await firebase.firestore().collection('users').get()
+            await firebase.firestore().collection('users').doc(user.uid).collection('ocrContacts').get()
               .then(querySnapshot => {
                 querySnapshot.docs.forEach(doc => {
-                markers.push(doc.id,doc.data());
+                contactData.push(doc.data());
               });
             });
+           // contactData.push(markers);
+            console.log("CONTAAAACRRRR:", contactData);
 
-            const P_Users = [];
+      //       const P_Users = [];
 
-            markers.forEach((item, i) => {
-              if ("Public" === markers[i].privacy) {
-                P_Users.push(markers[i]);
-              }
-            });
+      //       markers.forEach((item, i) => {
+      //         if ("Public" === markers[i].privacy) {
+      //           P_Users.push(markers[i]);
+      //         }
+      //       });
       
       
     // ===================================================
 
    // console.log("LISTA CON DATOS: ", typeof( contactData));
-    
+    setRefreshing(false);
     setContacts(contactData);
     setContactsFilter(contactData);
   }
@@ -142,11 +150,20 @@ export default function List() {
   };
   //===============================================
   
-
+  const getItem = (item) => {
+    Alert.alert(
+      item.companyName,
+      "Owner: "+item.name +
+      "\nEmail: "+item.email+ "\n Phone:"+item.phone
+    );
+    // Function for click on an item
+    // alert('Company name : ' + item.companyName + '\nOwner name : ' + item.name + '\nEmail : ' + item.email+'Phone: '+ item.phone);
+  };
   
 
   return (
     <View style={styles.container}>
+      <ImageBackground source={require('../Images/background.jpeg')} style={styles.image}>
       <TextInput
             style={styles.textInputStyle}
             onChangeText={(text) => searchFilterFunction(text)}
@@ -173,16 +190,20 @@ export default function List() {
                     justifyContent: "center",
                   }}
                 >
-                  <Text style={{ fontSize: 22, fontWeight: "bold" }}>
+                  <Text style={{ fontSize: 22, fontWeight: "bold" }} onPress={() => getItem(item)}>
                     {item.name}
                   </Text>
-                  <Text style={{ fontSize: 14 }}>{item.companyName}</Text>
+                  <Text style={{ fontSize: 14 }}>{item.companyName}onPress={() => getItem(item)}</Text>
                 </View>
               </Surface>
             </Animated.View>
           );
         }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={getContacts} />
+        }
       />
+      </ImageBackground>
     </View>
   );
 }
@@ -209,5 +230,10 @@ const styles = StyleSheet.create({
     margin: 5,
     borderColor: '#009688',
     backgroundColor: '#FFFFFF',
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center"
   },
 });
